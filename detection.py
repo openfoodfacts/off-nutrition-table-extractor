@@ -2,7 +2,9 @@ from PIL import Image
 import argparse
 
 from detect_table_class import NutritionTableDetector
-from crop import crop_img
+from crop import crop_img, crop
+from text_detection import text_detection
+from process import ocr
 
 def main():
 
@@ -26,8 +28,15 @@ def main():
     coords = (xmin, ymin, xmax, ymax)
 
     #Crop the image with the given bounding box
-    cropped_image = crop_img(image, coords, "./")
-    cropped_image.show()
+    crop_img(image, coords, "./test_images/output.jpg",0, True)
 
+    #detect the text
+    text_blob_list = text_detection("./test_images/output.jpg")
+
+    #Apply OCR to to blobs
+    for blob_cord in text_blob_list:
+        cropped_image = crop("./test_images/output.jpg", blob_cord, 0.005)
+        text = ocr(cropped_image)
+        print(text)
 if __name__ == '__main__':
     main()
