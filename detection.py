@@ -5,6 +5,8 @@ from detect_table_class import NutritionTableDetector
 from crop import crop_img, crop
 from text_detection import text_detection
 from process import ocr
+from regex import *
+from nutrient_list import label_list
 
 def main():
 
@@ -28,15 +30,24 @@ def main():
     coords = (xmin, ymin, xmax, ymax)
 
     #Crop the image with the given bounding box
-    crop_img(image, coords, "./test_images/output.jpg",0, True)
+    crop_img(image, coords, "./test_images/output.jpg", 0, True)
 
     #detect the text
     text_blob_list = text_detection("./test_images/output.jpg")
 
     #Apply OCR to to blobs
     for blob_cord in text_blob_list:
+        
         cropped_image = crop("./test_images/output.jpg", blob_cord, 0.005)
+
         text = ocr(cropped_image)
-        print(text)
+        text = clean_string(text)
+        
+        if check_for_label(text, label_list):
+
+            label_name, label_value = get_label_from_string(text)
+            print(label_name+", "+ label_value)
+
+        # print(text)
 if __name__ == '__main__':
     main()
