@@ -1,11 +1,25 @@
 import re
 import argparse
-from nutrient_list import label_list
+from nutrient_list import make_list
+
+def change_to_g(text):
+    search_ln = re.search("\d\s|\d$", text)
+    if search_ln and search_ln.group().strip() == "9":
+        index = search_ln.span()[0]
+        text = text[:index] +"g"+ text[index+1:]
+
+    search_lnq = re.search("\dmq\s|\dmq$", text)
+    if search_lnq:
+        index = search_lnq.span()[0] +2
+        text = text[:index] +"g"+ text[index+1:]
+    return text
 
 def clean_string(string):
     pattern = "[\|\*\_\'\—\-]"
     text = re.sub(pattern, "", string)
-    text = text.strip()
+    text = re.sub("Omg", "0mg", text)
+    text = re.sub("Og", "0g", text)
+    text = change_to_g(text)
     return text
 
 def check_for_label(text, words):
@@ -19,13 +33,17 @@ def get_label_from_string(string):
     label_arr = re.findall("([A-Z][a-zA-Z]*)", string)
     label_name = ""
     label_value = ""
-    # print(label_arr)
-    if len(label_arr) == 1:
+
+    if len(label_arr) == 0:
+        label_name = "|"+string+'|'
+    elif len(label_arr) == 1:
         label_name = label_arr[0]
-    elif len(label_arr) == 2:
+    else:
         label_name = label_arr[0] + ' ' + label_arr[1]
-    
-    digit_pattern = "[-+]?\d*\.\d+|\d+"
+
+        
+
+    digit_pattern = "[-+]?\d*\.\d+g|\d+"
     value_arr = re.findall("{0}g|{0}%|{0}J|{0}kJ|{0}mg".format(digit_pattern), string)
     # print(value_arr)
     if len(value_arr):
@@ -47,7 +65,7 @@ def main():
         print('Output: ' + clean_string(args.string))
         
     elif FLAG == 1:
-        print(check_for_label(args.string, label_list))
+        print(check_for_label(args.string, make_list("big.txt")))
     elif FLAG == 2:
         print(get_label_from_string(args.string))
 

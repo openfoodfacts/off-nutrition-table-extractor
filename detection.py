@@ -6,7 +6,7 @@ from crop import crop_img, crop
 from text_detection import text_detection
 from process import ocr
 from regex import *
-from nutrient_list import label_list
+from nutrient_list import make_list
 
 def main():
 
@@ -43,7 +43,7 @@ def main():
         text = ocr(cropped_image)
         text = clean_string(text)
         
-        if check_for_label(text, label_list):
+        if check_for_label(text, make_list('big.txt')):
 
             label_name, label_value = get_label_from_string(text)
             print(label_name+", "+ label_value)

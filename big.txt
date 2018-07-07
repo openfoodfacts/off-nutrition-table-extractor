@@ -1,0 +1,14 @@
+Energy
+Cholesterol 
+Carbohydrate
+Potassium
+Sodium
+Monounsaturated Fat
+Polyunsaturated Fat
+Trans Fat
+Saturated
+Total Fat
+Protein
+Fiber
+Sugars
+Total Carb.
