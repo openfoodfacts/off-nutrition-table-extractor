@@ -1,1 +1,4 @@
 data/ctpn.pb
+__pycache__/*
+utils/__pycache__/*
+test_images/*
