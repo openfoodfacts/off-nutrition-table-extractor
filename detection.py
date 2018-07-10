@@ -1,11 +1,12 @@
-from PIL import Image
+# from PIL import Image
 import argparse
 import time
+import cv2
 
 from detect_table_class import NutritionTableDetector
-from crop import crop_img, crop
+from crop import crop
 from text_detection import text_detection
-from process import ocr
+from process import *
 from regex import *
 from nutrient_list import make_list
 
@@ -19,9 +20,12 @@ def main():
     start_time = time.time()
     #Make the table detector class and predict the score
     obj = NutritionTableDetector()
-    image = Image.open(args.image)
+    # image = Image.open(args.image)
+    image = cv2.imread(args.image)
     boxes, scores, classes, num  = obj.get_classification(image)
-    width, height = image.size
+    # width, height = image.size
+    width = image.shape[1]
+    height = image.shape[0]
 
     time_taken = time.time() - start_time
     print("Time taken to detect the table: %.5fs" % time_taken)
@@ -36,19 +40,19 @@ def main():
     coords = (xmin, ymin, xmax, ymax)
 
     #Crop the image with the given bounding box
-    crop_img(image, coords, "./data/result/output.jpg", 0, True)
+    cropped_image = crop(image, coords, "./data/result/output.jpg", 0, False)
 
     #detect the text
-    text_blob_list = text_detection("./data/result/output.jpg")
+    text_blob_list = text_detection(cropped_image)
     time_taken = time.time() - start_time
     print("Time Taken to detect bounding boxes for text: %.5fs" % time_taken)
 
     #Apply OCR to to blobs
     for blob_cord in text_blob_list:
         
-        cropped_image = crop("./data/result/output.jpg", blob_cord, 0.005)
-
-        text = ocr(cropped_image)
+        word_image = crop(cropped_image, blob_cord, "./", 0.005, False)
+        word_image = preprocess_for_ocr(word_image)
+        text = ocr(word_image)
         text = clean_string(text)
 
         if check_for_label(text, make_list('data/big.txt')):

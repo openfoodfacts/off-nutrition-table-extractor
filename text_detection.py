@@ -65,7 +65,7 @@ def return_blobs_tuple(boxes, scale):
     return(tuple(blob_list))
 
 
-def text_detection(im_name):
+def text_detection(img):
     config = tf.ConfigProto(allow_soft_placement=True)
     sess = tf.Session(config=config)
     with gfile.FastGFile('data/ctpn.pb', 'rb') as f:
@@ -82,7 +82,7 @@ def text_detection(im_name):
     # im_name = "test_images/0044000030667_1.jpg"
 
     #print(('Demo for {:s}'.format(im_name)))
-    img = cv2.imread(im_name)
+    # img = cv2.imread(im_name)
     img, scale = resize_im(img, scale=TextLineCfg.SCALE, max_scale=TextLineCfg.MAX_SCALE)
     blobs, im_scales = _get_blobs(img, None)
     if cfg.TEST.HAS_RPN:
