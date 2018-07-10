@@ -15,7 +15,7 @@ def change_to_g(text):
     return text
 
 def clean_string(string):
-    pattern = "[\|\*\_\'\—\-]"
+    pattern = "[\|\*\_\'\—\-\{}]".format('"')
     text = re.sub(pattern, "", string)
     text = re.sub("Omg", "0mg", text)
     text = re.sub("Og", "0g", text)

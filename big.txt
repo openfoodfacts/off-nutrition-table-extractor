@@ -6,7 +6,7 @@ Sodium
 Monounsaturated Fat
 Polyunsaturated Fat
 Trans Fat
-Saturated
+Saturated Fat
 Total Fat
 Protein
 Fiber
