@@ -31,6 +31,7 @@ def crop(image_path, coords, extend_ratio=0):
     nx, ny = image_obj.size
     modified_coords = (coords[0]-extend_ratio*nx, coords[1]-extend_ratio*ny, coords[2]+extend_ratio*nx, coords[3]+extend_ratio*ny)
     cropped_image = image_obj.crop(modified_coords)
+    # cropped_image.show()
     return cropped_image    
 
 def main():
