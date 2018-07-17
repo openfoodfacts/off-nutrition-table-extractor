@@ -4,6 +4,7 @@ import csv
 import cv2
 import pytesseract
 from PIL import Image
+import numpy as np
 
 # from crop import crop
 
@@ -17,7 +18,7 @@ def preprocess_for_ocr(img):
     # img = cv2.dilate(img, kernel, iterations=1)
     # img = cv2.erode(img, kernel, iterations=1)
 
-    img = cv2.threshold(img, 10, 255, cv2.THRESH_BINARY_INV)[1]
+    # img = cv2.threshold(img, 10, 255, cv2.THRESH_BINARY_INV)[1]
 
     return img
 
@@ -27,10 +28,21 @@ def ocr(img, oem=1):
     @param oem: for specifying the type of Tesseract engine( default=1 for LSTM OCR Engine)
     """
     config = ('-l eng --oem {} --psm 3'.format(oem))
+    # print(img)
 
-    img = Image.fromarray(img)
-    img.show()
+    # if np.any(img):
+    #     return ""
+    # else:
+    #     img = Image.fromarray(img)
+    #     img.show()
+    #     text = pytesseract.image_to_string(img, config=config)
+    #     return text
+    filename = "data/result/temp.jpg"
+    cv2.imwrite(filename, img)
+    img = Image.open(filename)
     text = pytesseract.image_to_string(img, config=config)
+    os.remove(filename)
+
     return text
 
 

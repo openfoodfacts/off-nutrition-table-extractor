@@ -51,7 +51,7 @@ def main():
     for blob_cord in text_blob_list:
         
         word_image = crop(cropped_image, blob_cord, "./", 0.005, False)
-        word_image = preprocess_for_ocr(word_image)
+        # word_image = preprocess_for_ocr(word_image)
         text = ocr(word_image)
         text = clean_string(text)
 
