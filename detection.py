@@ -20,7 +20,7 @@ def main():
     start_time = time.time()
     #Make the table detector class and predict the score
     obj = NutritionTableDetector()
-    # image = Image.open(args.image)
+
     image = cv2.imread(args.image)
     boxes, scores, classes, num  = obj.get_classification(image)
     # width, height = image.size
@@ -51,7 +51,7 @@ def main():
     for blob_cord in text_blob_list:
         
         word_image = crop(cropped_image, blob_cord, "./", 0.005, False)
-        # word_image = preprocess_for_ocr(word_image)
+        word_image = preprocess_for_ocr(word_image)
         text = ocr(word_image)
         text = clean_string(text)
 

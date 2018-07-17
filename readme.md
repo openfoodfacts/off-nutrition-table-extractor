@@ -20,5 +20,5 @@ If you find any other dependency required during the run, do raise an issue and 
 ## How to test your image
 - Download the frozen model for ctpn from [here](https://github.com/eragonruan/text-detection-ctpn/releases/download/untagged-48d74c6337a71b6b5f87/ctpn.pb).
 - Save the model to `./data`.
-- Make a directory named test_images
+- Make a directory named test_images and put the images in that folder.
 - run `python detection.py -i [IMAGE-PATH]`
