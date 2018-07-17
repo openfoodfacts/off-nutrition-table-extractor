@@ -28,22 +28,13 @@ def ocr(img, oem=1):
     @param oem: for specifying the type of Tesseract engine( default=1 for LSTM OCR Engine)
     """
     config = ('-l eng --oem {} --psm 3'.format(oem))
-    # print(img)
 
-    # if np.any(img):
-    #     return ""
-    # else:
-    #     img = Image.fromarray(img)
-    #     img.show()
-    #     text = pytesseract.image_to_string(img, config=config)
-    #     return text
-    filename = "data/result/temp.jpg"
-    cv2.imwrite(filename, img)
-    img = Image.open(filename)
-    text = pytesseract.image_to_string(img, config=config)
-    os.remove(filename)
-
-    return text
+    try:
+        img = Image.fromarray(img)
+        text = pytesseract.image_to_string(img, config=config)
+        return text
+    except:
+        return ""
 
 
 if __name__ == '__main__':
