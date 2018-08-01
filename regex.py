@@ -15,11 +15,12 @@ def change_to_g(text):
     return text
 
 def clean_string(string):
-    pattern = "[\|\*\_\'\—\-]"
+    pattern = "[\|\*\_\'\—\-\{}]".format('"')
     text = re.sub(pattern, "", string)
     text = re.sub("Omg", "0mg", text)
     text = re.sub("Og", "0g", text)
     text = change_to_g(text)
+    text = text.strip()
     return text
 
 def check_for_label(text, words):
@@ -65,7 +66,7 @@ def main():
         print('Output: ' + clean_string(args.string))
         
     elif FLAG == 1:
-        print(check_for_label(args.string, make_list("big.txt")))
+        print(check_for_label(args.string, make_list("data/big.txt")))
     elif FLAG == 2:
         print(get_label_from_string(args.string))
 
