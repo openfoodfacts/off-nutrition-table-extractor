@@ -40,18 +40,19 @@ def main():
     coords = (xmin, ymin, xmax, ymax)
 
     #Crop the image with the given bounding box
-    cropped_image = crop(image, coords, "./data/result/output.jpg", 0, False)
+    cropped_image = crop(image, coords, "./data/result/output.jpg", 0, True)
 
+    # cropped_image = preprocess_for_ocr(cropped_image)
     #detect the text
     text_blob_list = text_detection(cropped_image)
     time_taken = time.time() - start_time
     print("Time Taken to detect bounding boxes for text: %.5fs" % time_taken)
-
+    print(text_blob_list)
     #Apply OCR to to blobs
     for blob_cord in text_blob_list:
         
         word_image = crop(cropped_image, blob_cord, "./", 0.005, False)
-        word_image = preprocess_for_ocr(word_image)
+        # word_image = preprocess_for_ocr(word_image)
         text = ocr(word_image)
         text = clean_string(text)
 
@@ -62,7 +63,7 @@ def main():
 
         # print(text)
     time_taken = time.time() - start_time
-    print("Time Taken: %.5fs" % time_taken)
+    print("Total Time Taken: %.5fs" % time_taken)
 
 if __name__ == '__main__':
     main()
