@@ -9,6 +9,7 @@ from text_detection import text_detection
 from process import *
 from regex import *
 from nutrient_list import make_list
+from spacial_map import *
 
 def main():
 
@@ -50,19 +51,52 @@ def main():
     print("Time Taken to detect bounding boxes for text: %.5fs" % time_taken)
     # print(text_blob_list)
     #Apply OCR to to blobs
-    for blob_cord in text_blob_list:
+    # for blob_cord in text_blob_list:
         
+    #     word_image = crop(cropped_image, blob_cord, "./", 0.005, False)
+    #     # word_image = preprocess_for_ocr(word_image)
+    #     text = ocr(word_image)
+    #     text = clean_string(text)
+
+    #     # if check_for_label(text, make_list('data/big.txt')):
+
+    #     #     label_name, label_value = get_label_from_string(text)
+    #     #     print(label_name+", "+ label_value)
+
+    #     # print(text)
+    # time_taken = time.time() - start_time
+    # print("Total Time Taken: %.5fs" % time_taken)
+    text_location_list = []
+    for blob_cord in text_blob_list:
         word_image = crop(cropped_image, blob_cord, "./", 0.005, False)
-        # word_image = preprocess_for_ocr(word_image)
+        word_image = preprocess_for_ocr(word_image)
         text = ocr(word_image)
-        text = clean_string(text)
+ 
+        if text:
+            centre_x = (blob_cord[0]+blob_cord[2])/2
+            centre_y = (blob_cord[1]+blob_cord[3])/2
+            box_centre = (centre_x, centre_y)
 
-        # if check_for_label(text, make_list('data/big.txt')):
+            new_location = {
+                'bbox': blob_cord,
+                'text': text,
+                'box_centre': box_centre,
+                'string_type': string_type(text)
+            }
+            text_location_list.append(new_location)
 
-        #     label_name, label_value = get_label_from_string(text)
-        #     print(label_name+", "+ label_value)
+    for text_dict in text_location_list:
+        # print(text['text'], text['string_type'])
+        if(text_dict['string_type']==0):
+            text = clean_string(text_dict['text'])
 
-        # print(text)
+            if check_for_label(text, make_list('data/big.txt')):
+                label_name, label_value = get_label_from_string(text)
+                print(label_name+", "+ label_value)
+
+                # print(text) 
+                   
+
     time_taken = time.time() - start_time
     print("Total Time Taken: %.5fs" % time_taken)
 
