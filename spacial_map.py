@@ -17,7 +17,13 @@ def string_type(string):
 
     return 2
 
-# def position_definer():
+def position_definer(center_y, ymin, ymax):
+    """
+    @param center_y: y coordinate of the search box
+    @param ymin: minimum y coordinate of the box to be tested for
+    @param ymax: maximum y coordinate of the box to be tested for
+    """
+    return ymin < center_y < ymax
     
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
