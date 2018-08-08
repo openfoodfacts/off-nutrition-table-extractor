@@ -12,3 +12,5 @@ Protein
 Fiber
 Sugars
 Total Carb.
+Fibre
+CHO

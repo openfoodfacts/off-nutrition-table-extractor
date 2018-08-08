@@ -39,8 +39,10 @@ def ocr(img, oem=1):
         img = Image.fromarray(img)
         # img.show()
         text = pytesseract.image_to_string(img, config=config)
+
         return text
     except:
+
         return ""
 
 
