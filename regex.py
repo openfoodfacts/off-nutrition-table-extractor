@@ -19,6 +19,7 @@ def clean_string(string):
     text = re.sub(pattern, "", string)
     text = re.sub("Omg", "0mg", text)
     text = re.sub("Og", "0g", text)
+    text = re.sub('(?<=\d) (?=\w)', '', text)
     text = change_to_g(text)
     text = text.strip()
     return text
@@ -45,13 +46,19 @@ def get_label_from_string(string):
         
 
     digit_pattern = "[-+]?\d*\.\d+g|\d+"
-    value_arr = re.findall("{0}g|{0}%|{0}J|{0}kJ|{0}mg".format(digit_pattern), string)
+    value_arr = re.findall("{0}g|{0}%|{0}J|{0}kJ|{0}mg|{0}kcal".format(digit_pattern), string)
     # print(value_arr)
     if len(value_arr):
         label_value = value_arr[0]
     else:
         label_value = "|"+string+'|'
     return label_name, label_value
+
+def separate_unit(string):
+    r = re.compile("(\d+\.?\d*)([a-zA-Z]+)")
+    m = r.match(string)
+
+    return (float(m.group(1)), m.group(2))
 
 def main():
     ap = argparse.ArgumentParser()
@@ -69,6 +76,8 @@ def main():
         print(check_for_label(args.string, make_list("data/big.txt")))
     elif FLAG == 2:
         print(get_label_from_string(args.string))
+    elif FLAG == 3:
+        print(separate_unit(args.string))
 
 if __name__ == '__main__':
     main()
