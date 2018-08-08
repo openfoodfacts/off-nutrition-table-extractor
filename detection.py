@@ -11,11 +11,9 @@ from regex import *
 from nutrient_list import make_list
 from spacial_map import *
 
-def main():
+def main(img):
 
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", required=True, help="path to the input image")
-    args = ap.parse_args()
+    
 
     #Start the time
     start_time = time.time()
@@ -88,11 +86,16 @@ def main():
 
             if check_for_label(text, make_list('data/big.txt')):
                 label_name, label_value = get_label_from_string(text)
-                nutrient_dict[label_name] = label_value
+                nutrient_dict[label_name] = separate_unit(label_value)
     
-    print(nutrient_dict)
     time_taken = time.time() - start_time
     print("Total Time Taken: %.5fs" % time_taken)
 
+    return nutrient_dict
+
 if __name__ == '__main__':
-    main()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-i", "--image", required=True, help="path to the input image")
+    args = ap.parse_args()
+    
+    print(main(args.image))

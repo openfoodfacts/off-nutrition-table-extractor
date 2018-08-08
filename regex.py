@@ -54,6 +54,12 @@ def get_label_from_string(string):
         label_value = "|"+string+'|'
     return label_name, label_value
 
+def separate_unit(string):
+    r = re.compile("(\d+\.?\d*)([a-zA-Z]+)")
+    m = r.match(string)
+
+    return (float(m.group(1)), m.group(2))
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-s", "--string", required=True, help="Enter the string to be cleaned")
@@ -70,6 +76,8 @@ def main():
         print(check_for_label(args.string, make_list("data/big.txt")))
     elif FLAG == 2:
         print(get_label_from_string(args.string))
+    elif FLAG == 3:
+        print(separate_unit(args.string))
 
 if __name__ == '__main__':
     main()
