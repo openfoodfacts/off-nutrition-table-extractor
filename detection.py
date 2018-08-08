@@ -47,7 +47,7 @@ def main():
     text_blob_list = text_detection(cropped_image)
     time_taken = time.time() - start_time
     print("Time Taken to detect bounding boxes for text: %.5fs" % time_taken)
-    print(text_blob_list)
+    # print(text_blob_list)
     #Apply OCR to to blobs
     for blob_cord in text_blob_list:
         
