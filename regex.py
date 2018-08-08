@@ -43,8 +43,6 @@ def get_label_from_string(string):
     else:
         label_name = label_arr[0] + ' ' + label_arr[1]
 
-        
-
     digit_pattern = "[-+]?\d*\.\d+g|\d+"
     value_arr = re.findall("{0}g|{0}%|{0}J|{0}kJ|{0}mg|{0}kcal".format(digit_pattern), string)
     # print(value_arr)

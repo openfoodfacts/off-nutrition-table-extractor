@@ -11,16 +11,14 @@ from regex import *
 from nutrient_list import make_list
 from spacial_map import *
 
-def main(img):
-
-    
+def detect(img_path):
 
     #Start the time
     start_time = time.time()
     #Make the table detector class and predict the score
     obj = NutritionTableDetector()
 
-    image = cv2.imread(args.image)
+    image = cv2.imread(img_path)
     boxes, scores, classes, num  = obj.get_classification(image)
     # width, height = image.size
     width = image.shape[1]
@@ -42,7 +40,7 @@ def main(img):
     # cropped_image = crop(image, coords, "./data/result/output.jpg", 0, True)
     cropped_image = crop(image, coords, "./test_images/output.jpg", 0, True)
 
-    # cropped_image = preprocess_for_ocr(cropped_image)
+    cropped_image = preprocess_for_ocr(cropped_image)
     #detect the text
     text_blob_list = text_detection(cropped_image)
     time_taken = time.time() - start_time
@@ -93,9 +91,12 @@ def main(img):
 
     return nutrient_dict
 
-if __name__ == '__main__':
+def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--image", required=True, help="path to the input image")
     args = ap.parse_args()
     
-    print(main(args.image))
+    print(detect(args.image))
+
+if __name__ == '__main__':
+    main()
