@@ -27,8 +27,8 @@ def crop(image_obj, coords, saved_location, extend_ratio=0, SAVE=False):
 
 
     return cropped_image
- 
 
+#main function to test different functions independently
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("-i", "--image", required=True, help="path to the input image")

@@ -1,6 +1,10 @@
 import argparse
 
+#Make a list from the nutrient dictionary
 def make_list(fname):
+    '''
+    @param fname: path to the dictionary
+    '''
     with open(fname) as f:
         content = f.readlines()
     # you may also want to remove whitespace characters like `\n` at the end of each line
