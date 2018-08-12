@@ -1,14 +1,43 @@
+
 # off-nutrition-table-extractor
+This repository is the accumulation of all the work done during Google Summer of Code 2018.
+- **Student**: Sagar Panchal
+- **Github**: [sgrpanchal31](https://github.com/sgrpanchal31)
+- **Organisation**: [Open Food Facts](https://world.openfoodfacts.org/)
+- **Project**: [OCR on Nutritional Facts Table](https://summerofcode.withgoogle.com/projects/#6627107531128832)
 
-This repository shows how we are using the SSD model to detect the nutrition tables in images. The provided Jupyter Notebook shows how we can use the pre-trained graph to detect the tables in the product images.
-Before running the notebook, install the object detection model from the [Tensorflow Github Repository](https://github.com/tensorflow/models).
+## Technical Details
+The pipeline is made up of three major parts namely table detection, text detection and OCR with post-processing.
 
-The work is going on in this repository and until now, we have extracted the nutritional facts from a table but the results are preliminary.
+### Table Detection
+For detecting tables in an image, we are using the Single Shot Detector (SSD) object detection model. The model is trained on Tensorflow's Object Detection API. The provided Jupyter Notebook shows how we are using the pre-trained graph to detect tables in product images.
+Before running the notebook, install the object detection model from the [Tensorflow's Github Repository](https://github.com/tensorflow/models).
+![Table detection](/data/images/table_detection.jpeg)
 
-To detect the table Single Shot Detector (SSD) object detection model is used which is trained on Tensorflow Object Detection API. The text detection is done using the [text-detection-ctpn](https://github.com/eragonruan/text-detection-ctpn) which uses fast-rcnn to detect text. In the future we will update it to a faster text detection model. For the text recognition, we are using Tesseract OCR.
+### Text Detection and extraction
+Text detection is done using the [text-detection-ctpn](https://github.com/eragonruan/text-detection-ctpn) which uses fast-rcnn to extract textual regions in the image. In future, we are planning to update it to a faster and more accurate text detection model.
+![Text Detection](/data/images/text_detection.jpg)
+
+### OCR and post-processing
+For the text recognition, we are using Tesseract OCR. Every text box detected from the text detection step will be passed through the OCR and a raw string will be returned which is then passed throught many post processing steps that clean the string (through regular expressions) and rectify any spelling mistakes in the string (using the [symspell](https://github.com/wolfgarbe/SymSpell) spelling correction algorithm).
+
+### Final Results
+![Full pipeline detection](/data/images/final.jpg)
+Output for the above image is given below:
+```
+Nutritional content = {
+    'Dietary Fiber': (2.0, 'g'), 
+    'Sugars': (9.0, 'g'),
+    'Soluble Fiber': (1.0, 'g'), 
+    'Monounsaturated Fat': (0.5, 'g'), 
+    'Polyunsaturated Fat': (0.5, 'g'), 
+    'Trans Fat': (0.0, 'g'), 
+    'Other Carbohydrate': (11.0, 'g')
+}
+```
 
 ## Requirements
-If you find any other dependency required during the run, do raise an issue and inform there. 
+The code is compatible with Python 3.0+. If you find any other dependency required during the execution, do raise an issue and inform there. 
 ```
 1. Tensorflow
 2. OpenCV
@@ -17,8 +46,24 @@ If you find any other dependency required during the run, do raise an issue and 
 5. Tesseract v4.0
 6. Pytesseract
 ```
+
 ## How to test your image
 - Download the frozen model for ctpn from [here](https://github.com/eragonruan/text-detection-ctpn/releases/download/untagged-48d74c6337a71b6b5f87/ctpn.pb).
-- Save the model to `./data`.
+- Save the model in `./data` repository.
 - Make a directory named `test_images` and put the images in that folder.
-- run `python detection.py -i [IMAGE-PATH]`
+- run `python detection.py -i [IMAGE-PATH]`.
+
+## Planned functionality
+- [x] Develop a table detection model to extract the region of interest (nutritional facts table) from images.
+- [x] Crop the RoI from images and apply text detection pipeline to the region.
+- [x] Pass every text blob through Tesseract OCR to extract the text.
+- [x] Develop a post-processing method to clean the text and extract the nutritional label and its value form it.
+- [ ] Create a spatial mapping algorithm to map the text blobs according to their location in the image. (Done but the accuracy is not upto the standards).
+
+## Future Work
+With GSoC 2018 being the kickstarter of this project, we are just getting started. There are a lot of things to do that we are going to do
+* Improving the spatial mapping algorithm. 
+* Training and using a faster and more accurate text detection model than the currently used fast-rcnn model.
+* Creating a bigger nutritional table dataset and training that on a recent and bleeding edge object detection model to improve the accuracy.
+* Developing a better image preprocessing algorithm to detect bold text.
+* Implementing a method to unify the two models into one since the same calculations are being done twice in initial layers of the two models.

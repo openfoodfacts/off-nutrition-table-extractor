@@ -9,16 +9,9 @@ import numpy as np
 # from crop import crop
 
 def preprocess_for_ocr(img):
-
-    # Convert to gray
-    # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # Apply dilation and erosion to remove some noise
-    # kernel = np.ones((1, 1), np.uint8)
-    # img = cv2.dilate(img, kernel, iterations=1)
-    # img = cv2.erode(img, kernel, iterations=1)
-
-    # img = cv2.threshold(img, 10, 255, cv2.THRESH_BINARY_INV)[1]
+    """
+    @param img: image to which the pre-processing steps being applied
+    """
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -37,7 +30,6 @@ def ocr(img, oem=1):
 
     try:
         img = Image.fromarray(img)
-        # img.show()
         text = pytesseract.image_to_string(img, config=config)
 
         return text
