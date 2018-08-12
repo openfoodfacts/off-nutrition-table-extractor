@@ -22,7 +22,7 @@ Text detection is done using the [text-detection-ctpn](https://github.com/eragon
 For the text recognition, we are using Tesseract OCR. Every text box detected from the text detection step will be passed through the OCR and a raw string will be returned which is then passed throught many post processing steps that clean the string (through regular expressions) and rectify any spelling mistakes in the string (using the [symspell](https://github.com/wolfgarbe/SymSpell) spelling correction algorithm).
 
 ### Final Results
-![Full pipeline detection](/data/images/final.jpg)
+![Full pipeline detection](/data/images/final_result.jpg)
 Output for the above image is given below:
 ```
 Nutritional content = {
