@@ -1,4 +1,5 @@
 data/ctpn.pb
 __pycache__/*
-utils/__pycache__/*
-test_images/*
+nutrition_extractor/utils/__pycache__/*
+nutrition_extractor/test_images/*
+files/*
