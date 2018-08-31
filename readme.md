@@ -45,6 +45,7 @@ The code is compatible with Python 3.0+. If you find any other dependency requir
 4. Numpy
 5. Tesseract v4.0
 6. Pytesseract
+7. Django-2.0.5 (Only for API)
 ```
 
 ## How to test your image
