@@ -1,8 +1,9 @@
 import re
 import argparse
-from nutrient_list import make_list
+import fuzzydict
+from nutrient_list import *
 
-#one of the most common OCR error of returning '9' in 
+#one of the most common OCR error of returning '9' in
 # place of 'g' is being handled by this function
 def change_to_g(text):
     search_ln = re.search("\d\s|\d$", text)
@@ -20,6 +21,8 @@ def change_to_g(text):
 def clean_string(string):
     pattern = "[\|\*\_\'\—\-\{}]".format('"')
     text = re.sub(pattern, "", string)
+    text = re.sub(" I ", " / ", text)
+    text = re.sub("^I ", "", text)
     text = re.sub("Omg", "0mg", text)
     text = re.sub("Og", "0g", text)
     text = re.sub('(?<=\d) (?=\w)', '', text)
@@ -27,7 +30,7 @@ def clean_string(string):
     text = text.strip()
     return text
 
-#Check whether a nutritional label is present in the 
+#Check whether a nutritional label is present in the
 #string or not
 def check_for_label(text, words):
     # text = text.lower()
@@ -35,6 +38,19 @@ def check_for_label(text, words):
         if any(text[i:].startswith(word) for word in words):
             return True
     return False
+
+def fuz_check_for_label(text, fuzdict, debug):
+    if debug:
+        print("fuz_check_for_label : {}".format(text))
+    # text = text.lower()
+    text = clean_string(text)
+    if fuzdict.__contains__(text):
+        return True
+    else:
+        if fuzdict.__contains__(re.split('[/|I]',text)[0]):
+            return True
+    return False
+
 
 #Separate the value and its label from the string
 def get_label_from_string(string):
@@ -58,12 +74,42 @@ def get_label_from_string(string):
         label_value = "|"+string+'|'
     return label_name, label_value
 
+#Separate the value and its label from the string
+def get_fuz_label_from_string(string, fuzdict, debug):
+     string = clean_string(string)
+     if debug:
+         print("get_fuz_label_from_string : {}".format(string))
+     label_arr = re.findall("([a-zA-Z]+)", string)
+     label_name = ""
+     label_value = ""
+
+     if fuzdict.__contains__(string):
+         label_name = fuzdict[string]
+     else:
+         label_name = fuzdict[re.split('[/|I]',string)[0]]
+
+     digit_pattern = "[-+]?\d*[\.\,\']?\d+"
+     value_arr = re.findall("{0}g|{0}%|{0}J|{0}kJ|{0}mg|{0}kcal|{0}".format(digit_pattern),  string)
+     if debug:
+        print(value_arr)
+     if len(value_arr):
+         label_value = value_arr[0]
+     else:
+         label_value = "|"+string+'|'
+     return label_name, label_value
+
 #Separate the unit from its value. (eg. '24g' to '24' and 'g')
 def separate_unit(string):
-    r = re.compile("(\d+\.?\d*)([a-zA-Z]+)")
-    m = r.match(string)
-
-    return (float(m.group(1)), m.group(2))
+    r1 = re.compile("(\d+[\.\,\']?\d*)([a-zA-Z]+)")
+    m1 = r1.match(string)
+    r2 = re.compile("(\d+[\.\,\']?\d*)")
+    m2 = r2.match(string)
+    if m1:
+       return (float(m1.group(1).replace(',','.').replace("'",'.')), m1.group(2))
+    elif m2:
+       return (float(m2.group(1).replace(',','.').replace("'",'.')))
+    else:
+       return ("")
 
 #main function to test different functions independently
 def main():
@@ -73,11 +119,11 @@ def main():
     args = ap.parse_args()
 
     FLAG = int(args.flag)
-    
+
     if FLAG == 0:
         print('Input: '+ args.string)
         print('Output: ' + clean_string(args.string))
-        
+
     elif FLAG == 1:
         print(check_for_label(args.string, make_list("data/big.txt")))
     elif FLAG == 2:
