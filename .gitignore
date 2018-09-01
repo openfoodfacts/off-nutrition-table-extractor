@@ -1,4 +1,8 @@
+nutrition_extractor/data/ctpn.pb
 data/ctpn.pb
-__pycache__/*
-utils/__pycache__/*
-test_images/*
+nutrition_extractor/__pycache__/*
+off-nutrition-table-extractor/__pycache__/*
+nutrition_extractor/utils/__pycache__/*
+api/__pycache__/*
+nutrition_extractor/test_images/*
+files/*
