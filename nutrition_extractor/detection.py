@@ -5,7 +5,7 @@ import cv2
 
 from detect_table_class import NutritionTableDetector
 from crop import crop
-from text_detection import text_detection
+from text_detection import text_detection, load_text_model
 from process import *
 from regex import *
 from nutrient_list import *
@@ -130,6 +130,7 @@ def main():
     args = ap.parse_args()
 
     load_model()
+    load_text_model()
 
     print(detect(args.image, args.debug))
 
