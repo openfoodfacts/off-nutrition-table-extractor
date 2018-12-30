@@ -44,14 +44,16 @@ def detect(img_path, debug):
     ymax = boxes[0][0][2]*height
     xmax = boxes[0][0][3]*width
 
-    # print(xmin, ymin, xmax, ymax, scores[0][0])
+    print(xmin, ymin, xmax, ymax, scores[0][0])
     coords = (xmin, ymin, xmax, ymax)
 
     #Crop the image with the given bounding box
     cropped_image = crop(image, coords, "./data/result/output.jpg", 0, True)
 
-    #Apply several filters to the image for better results in OCR
+#     #Apply several filters to the image for better results in OCR
     cropped_image = preprocess_for_ocr(cropped_image, 3)
+    # cv2.imshow(" image",cropped_image)
+    # cv2.waitKey(0)
 
     if debug:
         cv2.imwrite('./data/result/output-opt.png', cropped_image)
@@ -68,31 +70,40 @@ def detect(img_path, debug):
     nutrient_dict = {}        # Dictionary to store nutrient labels and their values
 
     counter=0
-    #Apply OCR to to blobs and save data in organized dict
+#     #Apply OCR to to blobs and save data in organized dict
     for blob_cord in text_blob_list:
+        print(counter)
+        counter+=1
         if debug:
             counter+=1
             word_image = crop(cropped_image, blob_cord, "./data/result/{}.jpg".format(counter), 0.005, True)
         else:
             word_image = crop(cropped_image, blob_cord, "./", 0.005, False)
-        word_image = preprocess_for_ocr(word_image)
-        text = ocr(word_image,1,7)
+        print(word_image.shape)
 
-        if debug:
+        if(word_image.shape[1]>0 and word_image.shape[0]>0):   
+            # cv2.imshow("image",word_image)
+            # cv2.waitKey(0)
+     
+            word_image = preprocess_for_ocr(word_image)
+            text = ocr(word_image,1,7)
             print(text)
 
-        if text:
-            center_x = (blob_cord[0]+blob_cord[2])/2
-            center_y = (blob_cord[1]+blob_cord[3])/2
-            box_center = (center_x, center_y)
+            if debug:
+                print(text)
 
-            new_location = {
-                'bbox': blob_cord,
-                'text': text,
-                'box_center': box_center,
-                'string_type': string_type(text)
-            }
-            text_location_list.append(new_location)
+            if text:
+                center_x = (blob_cord[0]+blob_cord[2])/2
+                center_y = (blob_cord[1]+blob_cord[3])/2
+                box_center = (center_x, center_y)
+
+                new_location = {
+                    'bbox': blob_cord,
+                    'text': text,
+                    'box_center': box_center,
+                    'string_type': string_type(text)
+                }
+                text_location_list.append(new_location)
 
     #Spatial algorithm that maps all boxes according to their location and append the string
     for text_dict in text_location_list:
