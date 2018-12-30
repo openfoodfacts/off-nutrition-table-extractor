@@ -52,8 +52,7 @@ def detect(img_path, debug):
 
 #     #Apply several filters to the image for better results in OCR
     cropped_image = preprocess_for_ocr(cropped_image, 3)
-    # cv2.imshow(" image",cropped_image)
-    # cv2.waitKey(0)
+    
 
     if debug:
         cv2.imwrite('./data/result/output-opt.png', cropped_image)
@@ -72,18 +71,15 @@ def detect(img_path, debug):
     counter=0
 #     #Apply OCR to to blobs and save data in organized dict
     for blob_cord in text_blob_list:
-        print(counter)
         counter+=1
         if debug:
             counter+=1
             word_image = crop(cropped_image, blob_cord, "./data/result/{}.jpg".format(counter), 0.005, True)
         else:
             word_image = crop(cropped_image, blob_cord, "./", 0.005, False)
-        print(word_image.shape)
+        
 
         if(word_image.shape[1]>0 and word_image.shape[0]>0):   
-            # cv2.imshow("image",word_image)
-            # cv2.waitKey(0)
      
             word_image = preprocess_for_ocr(word_image)
             text = ocr(word_image,1,7)
