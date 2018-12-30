@@ -83,7 +83,6 @@ def detect(img_path, debug):
      
             word_image = preprocess_for_ocr(word_image)
             text = ocr(word_image,1,7)
-            print(text)
 
             if debug:
                 print(text)
