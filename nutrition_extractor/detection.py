@@ -44,7 +44,7 @@ def detect(img_path, debug):
     ymax = boxes[0][0][2]*height
     xmax = boxes[0][0][3]*width
 
-    print(xmin, ymin, xmax, ymax, scores[0][0])
+    # print(xmin, ymin, xmax, ymax, scores[0][0])
     coords = (xmin, ymin, xmax, ymax)
 
     #Crop the image with the given bounding box
