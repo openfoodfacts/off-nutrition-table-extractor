@@ -76,23 +76,24 @@ def detect(img_path, debug):
         else:
             word_image = crop(cropped_image, blob_cord, "./", 0.005, False)
         word_image = preprocess_for_ocr(word_image)
-        text = ocr(word_image,1,7)
+        if (word_image.shape[1]>0 and word_image.shape[0]>0):
+            text = ocr(word_image,1,7)
 
-        if debug:
-            print(text)
+            if debug:
+                print(text)
 
-        if text:
-            center_x = (blob_cord[0]+blob_cord[2])/2
-            center_y = (blob_cord[1]+blob_cord[3])/2
-            box_center = (center_x, center_y)
+            if text:
+                center_x = (blob_cord[0]+blob_cord[2])/2
+                center_y = (blob_cord[1]+blob_cord[3])/2
+                box_center = (center_x, center_y)
 
-            new_location = {
-                'bbox': blob_cord,
-                'text': text,
-                'box_center': box_center,
-                'string_type': string_type(text)
-            }
-            text_location_list.append(new_location)
+                new_location = {
+                    'bbox': blob_cord,
+                    'text': text,
+                    'box_center': box_center,
+                    'string_type': string_type(text)
+                }
+                text_location_list.append(new_location)
 
     #Spatial algorithm that maps all boxes according to their location and append the string
     for text_dict in text_location_list:
