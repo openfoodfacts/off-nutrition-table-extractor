@@ -10,5 +10,5 @@ easydict==1.9
 ipython==7.17.0
 object-detection==0.0.3
 Pillow==7.2.0
-protobuf==3.12.4
+protobuf==3.19.1
 PyYAML==5.3.1
