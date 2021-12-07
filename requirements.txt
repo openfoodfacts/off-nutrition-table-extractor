@@ -5,7 +5,7 @@ scipy==1.4.1
 pytesseract==0.3.4
 numpy==1.13.3
 tensorflow==1.14.0
-Cython==0.29.21
+Cython==0.29.25
 easydict==1.9
 ipython==7.17.0
 object-detection==0.0.3
