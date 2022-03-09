@@ -1,3 +1,5 @@
+Important: Please have a look at the higher level issue in Robotoff: https://github.com/openfoodfacts/robotoff/issues/372
+This is an old model and we have made progress since then.
 
 # off-nutrition-table-extractor
 This repository is the accumulation of all the work done during Google Summer of Code 2018.
