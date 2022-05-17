@@ -4,7 +4,7 @@ opencv_contrib_python==4.3.0.36
 scipy==1.4.1
 pytesseract==0.3.4
 numpy==1.13.3
-tensorflow==1.14.0
+tensorflow==2.9.0
 Cython==0.29.21
 easydict==1.9
 ipython==7.17.0
