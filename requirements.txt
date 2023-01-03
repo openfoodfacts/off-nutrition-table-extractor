@@ -1,5 +1,5 @@
 matplotlib==2.1.1
-six==1.11.0
+six==1.16.0
 opencv_contrib_python==4.3.0.36
 scipy==1.4.1
 pytesseract==0.3.4
